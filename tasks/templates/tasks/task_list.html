@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Görev Listesi{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">📝 Görev Takip</h1>
+
+<form method="POST" class="d-flex mb-4">
+    {% csrf_token %}
+    {{ form.title }}
+    <button type="submit" class="btn btn-success ms-2">Ekle</button>
+</form>
+
+<ul class="list-group">
+    {% for task in tasks %}
+        <li class="list-group-item d-flex justify-content-between align-items-center {% if task.completed %}list-group-item-success{% endif %}">
+            {{ task.title }}
+            <div>
+                {% if not task.completed %}
+                    <a href="{% url 'complete-task' task.id %}" class="btn btn-sm btn-outline-primary">Tamamla</a>
+                {% endif %}
+                <a href="{% url 'delete-task' task.id %}" class="btn btn-sm btn-outline-danger">Sil</a>
+            </div>
+        </li>
+    {% empty %}
+        <li class="list-group-item">Henüz görev eklenmedi.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
